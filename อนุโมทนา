@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายนามเจ้าภาพ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #3b1d5c; /* สีม่วงเข้มตามภาพ */
+            --text-color: #ffffff;
+        }
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px; /* ขนาดจำลองหน้าจอมือถือ/แท็บเล็ต */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /* ส่วนหัวและรูปภาพ */
+        .header-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #8fc97a; /* กรอบสีเขียวอ่อนตามภาพ */
+        }
+        h2 {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        /* ตารางรายชื่อผู้บริจาค */
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .list-item {
+            display: grid;
+            grid-template-columns: 20px 2fr 1.5fr 70px 30px;
+            gap: 10px;
+            align-items: center;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+        .list-item .amount {
+            text-align: right;
+        }
+
+        /* ปุ่มและส่วนของแอดมิน */
+        .admin-toggle-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 40px;
+            background-color: #5a3286;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .admin-panel {
+            display: none; /* ซ่อนไว้ก่อน */
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .admin-panel h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .input-group input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Sarabun', sans-serif;
+        }
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .admin-list-item {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .btn-edit { background-color: #ffc107; border: none; padding: 5px; cursor: pointer;}
+        .btn-delete { background-color: #dc3545; color: white; border: none; padding: 5px; cursor: pointer;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="https://via.placeholder.com/600x400/3b1d5c/ffffff?text=พื้นที่ใส่รูปภาพโปสเตอร์งาน" alt="Poster" class="header-image">
+    
+    <h2>รายนามเจ้าภาพไทยธรรมถวายพระสงฆ์ทรงสมณศักดิ์</h2>
+
+    <div class="list-container" id="public-list">
+        </div>
+
+    <button class="admin-toggle-btn" onclick="toggleAdmin()">เข้าสู่โหมดจัดการแอดมิน</button>
+
+    <div class="admin-panel" id="admin-panel">
+        <h3>เพิ่มรายชื่อใหม่</h3>
+        <div class="input-group">
+            <input type="text" id="input-name" placeholder="ชื่อ / สมณศักดิ์">
+            <input type="text" id="input-title" placeholder="ตำแหน่ง / วัด">
+            <input type="number" id="input-amount" placeholder="จำนวนเงิน (บาท)">
+            <button class="btn-add" onclick="addEntry()">เพิ่มรายชื่อ</button>
+        </div>
+
+        <hr>
+        <h3>แก้ไข/ลบ รายชื่อ</h3>
+        <div id="admin-list">
+            </div>
+    </div>
+</div>
+
+<script>
+    // ข้อมูลเริ่มต้นจำลอง (อ้างอิงจากรูปของคุณ)
+    let defaultData = [
+        { id: 1, name: "พระมหาฉัตรชัย ชยญาณเมธี", title: "รองเจ้าคณะอำเภอนากลาง", amount: 3000 },
+        { id: 2, name: "พระครูสุตเมธาวัฒน์", title: "เจ้าคณะตำบลหนองภัยศูนย์", amount: 3000 },
+        { id: 3, name: "พระมหาชินดนัย ฐิตวุฑฺฒิเมธี", title: "เลขานุการเจ้าคณะตำบลกุดดินจี่ เขต ๒", amount: 3000 },
+        { id: 4, name: "พระมหาจักรภัทร คมฺภีรญาณเมธี", title: "วัดประสานศรัทธา", amount: 3000 }
+    ];
+
+    // โหลดข้อมูลจาก LocalStorage หรือใช้ค่า default ถ้ายังไม่มี
+    let donors = JSON.parse(localStorage.getItem('donorsData')) || defaultData;
+
+    // ฟังก์ชันสำหรับบันทึกข้อมูล
+    function saveData() {
+        localStorage.setItem('donorsData', JSON.stringify(donors));
+        renderList();
+    }
+
+    // ฟังก์ชันแปลงตัวเลขเป็นตัวเลขไทย (อุปกรณ์เสริมเพื่อให้เหมือนต้นฉบับเป๊ะๆ)
+    function toThaiNum(num) {
+        const thaiNumbers = ['๐', '๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙'];
+        return num.toString().replace(/\d/g, (d) => thaiNumbers[d]);
+    }
+
+    // ฟังก์ชันแสดงผลรายชื่อหน้าสาธารณะ
+    function renderList() {
+        const publicList = document.getElementById('public-list');
+        const adminList = document.getElementById('admin-list');
+        
+        publicList.innerHTML = '';
+        adminList.innerHTML = '';
+
+        donors.forEach((donor, index) => {
+            // Render หน้า Public
+            const numThai = toThaiNum(index + 1);
+            const amountStr = donor.amount.toLocaleString(); // ใส่คอมม่าให้ตัวเลข
+            
+            publicList.innerHTML += `
+                <div class="list-item">
+                    <div>${numThai}</div>
+                    <div>${donor.name}</div>
+                    <div>${donor.title}</div>
+                    <div class="amount">${amountStr}</div>
+                    <div>บาท</div>
+                </div>
+            `;
+
+            // Render หน้า Admin
+            adminList.innerHTML += `
+                <div class="admin-list-item">
+                    <div>
+                        <strong>${donor.name}</strong><br>
+                        <small>${donor.title} | ${amountStr} บาท</small>
+                    </div>
+                    <div>
+                        <button class="btn-edit" onclick="editEntry(${donor.id})">แก้ไข</button>
+                        <button class="btn-delete" onclick="deleteEntry(${donor.id})">ลบ</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // ฟังก์ชันเปิด/ปิดหน้าต่างแอดมิน
+    function toggleAdmin() {
+        const panel = document.getElementById('admin-panel');
+        if (panel.style.display === 'none' || panel.style.display === '') {
+            // แนะนำว่าของจริงควรมี Prompt ถามรหัสผ่านตรงนี้
+            // let password = prompt("ใส่รหัสผ่านแอดมิน:"); 
+            // if(password === "1234") { panel.style.display = 'block'; }
+            panel.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        } else {
+            panel.style.display = 'none';
+        }
+    }
+
+    // ฟังก์ชันเพิ่มข้อมูล
+    function addEntry() {
+        const name = document.getElementById('input-name').value;
+        const title = document.getElementById('input-title').value;
+        const amount = document.getElementById('input-amount').value;
+
+        if (!name || !amount) {
+            alert('กรุณากรอกชื่อและจำนวนเงิน');
+            return;
+        }
+
+        const newId = donors.length > 0 ? Math.max(...donors.map(d => d.id)) + 1 : 1;
+        donors.push({
+            id: newId,
+            name: name,
+            title: title || '',
+            amount: parseInt(amount)
+        });
+
+        // ล้างช่องกรอกข้อมูล
+        document.getElementById('input-name').value = '';
+        document.getElementById('input-title').value = '';
+        document.getElementById('input-amount').value = '';
+
+        saveData();
+    }
+
+    // ฟังก์ชันลบข้อมูล
+    function deleteEntry(id) {
+        if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายชื่อนี้?')) {
+            donors = donors.filter(donor => donor.id !== id);
+            saveData();
+        }
+    }
+
+    // ฟังก์ชันแก้ไขข้อมูลเบื้องต้น
+    function editEntry(id) {
+        const donor = donors.find(d => d.id === id);
+        if (donor) {
+            const newName = prompt('แก้ไขชื่อ:', donor.name);
+            const newTitle = prompt('แก้ไขตำแหน่ง:', donor.title);
+            const newAmount = prompt('แก้ไขจำนวนเงิน:', donor.amount);
+
+            if (newName !== null) donor.name = newName;
+            if (newTitle !== null) donor.title = newTitle;
+            if (newAmount !== null && !isNaN(newAmount)) donor.amount = parseInt(newAmount);
+
+            saveData();
+        }
+    }
+
+    // รันการแสดงผลครั้งแรก
+    renderList();
+</script>
+
+</body>
+</html>
