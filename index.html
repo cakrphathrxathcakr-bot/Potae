@@ -7,10 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #5D4037;    /* สีน้ำตาลเข้ม (จีวร/ไม้) */
+            --primary: #5D4037;    /* สีน้ำตาลเข้ม */
             --secondary: #8D6E63;  /* สีน้ำตาลอ่อน */
             --accent: #D4AF37;     /* สีทองเมทัลลิก */
-            --bg: #FDFBF7;         /* สีพื้นหลังครีมขาว สบายตา */
+            --bg: #FDFBF7;         /* สีพื้นหลังครีมขาว */
             --text-dark: #202020;
             --border: #E0E0E0;
         }
@@ -28,14 +28,13 @@
             min-height: 100vh;
         }
 
-        /* ส่วนหัว (Header) */
+        /* ส่วนหัว */
         header { 
             background: linear-gradient(135deg, var(--primary) 0%, #3E2723 100%); 
             color: white; 
             text-align: center; 
             padding: 3rem 1rem 2.5rem; 
             border-bottom: 6px solid var(--accent); 
-            position: relative;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
         
@@ -46,17 +45,16 @@
         .container { 
             flex-grow: 1;
             width: 100%;
-            max-width: 900px; /* กำหนดความกว้างสูงสุดให้พอดีสายตา */
-            margin: 0 auto; 
-            padding: 20px 15px; 
+            max-width: 1000px; 
+            margin: 30px auto; 
+            padding: 0 15px; 
         }
 
-        /* หัวข้อส่วน */
         .section-title { 
             font-size: 1.5rem; 
             font-weight: 700; 
             color: var(--primary); 
-            margin: 30px 0 20px; 
+            margin: 0 0 20px 0; 
             display: flex; 
             align-items: center; 
         }
@@ -64,14 +62,12 @@
             content: ''; display: inline-block; width: 6px; height: 28px; background: var(--accent); margin-right: 12px; border-radius: 3px;
         }
 
-        /* --------------------------------------------------- */
-        /* ★ ปรับโครงสร้างสำหรับคอมพิวเตอร์ (PC/Desktop) ★ */
-        /* --------------------------------------------------- */
+        /* ดีไซน์ตาราง (Table) */
         .table-wrapper {
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-            overflow: hidden; /* ให้ขอบโค้งทำงานได้ */
+            overflow-x: auto; /* ให้เลื่อนซ้ายขวาได้บนมือถือ */
             border: 1px solid var(--border);
         }
 
@@ -79,133 +75,52 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
+            min-width: 600px; /* บังคับความกว้างขั้นต่ำไม่ให้ตารางบีบเกินไป */
         }
 
         thead {
-            background-color: #F5F1E9;
-            border-bottom: 2px solid var(--border);
+            background-color: var(--secondary);
+            color: white;
         }
 
         th {
-            padding: 20px;
+            padding: 15px 20px;
             font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-align: center;
+            font-weight: 600;
         }
-
-        tbody tr {
-            border-bottom: 1px solid var(--border);
-            transition: background 0.2s;
-        }
-        tbody tr:last-child { border-bottom: none; }
-        tbody tr:hover { background-color: #FDFBF7; }
 
         td {
-            padding: 20px;
-            vertical-align: middle; /* จัดกลางในแนวตั้ง */
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
             font-size: 1.1rem;
-            line-height: 1.6;
+            vertical-align: top;
         }
 
-        /* จัดตำแหน่งและความกว้างของคอลัมน์ */
-        .col-date { width: 28%; text-align: center; color: var(--primary); font-weight: 600;}
-        .col-time { width: 18%; text-align: center; font-weight: bold; }
-        .col-title { width: 54%; }
+        tbody tr:hover { background-color: #F9F6F0; }
+        tbody tr:last-child td { border-bottom: none; }
 
-        /* --------------------------------------------------- */
-        /* ★ ปรับโครงสร้างสำหรับมือถือ (Mobile UI) ★ */
-        /* --------------------------------------------------- */
-        @media (max-width: 768px) {
-            .container { padding: 10px; }
-            
-            .header-title { font-size: 1.9rem; }
-            .header-subtitle { font-size: 1.25rem; }
-            .section-title { font-size: 1.35rem; margin-top: 20px; justify-content: center; }
+        /* การเน้นข้อมูล */
+        .col-date { width: 25%; font-weight: 600; color: var(--primary); }
+        .col-time { width: 15%; font-weight: bold; }
+        .col-title { width: 35%; font-weight: 600; }
+        .col-location { width: 25%; color: #666; font-size: 1rem; }
 
-            /* ยกเลิกรูปแบบตาราง */
-            .table-wrapper { background: transparent; box-shadow: none; border: none; }
-            table, thead, tbody, th, td, tr { display: block; width: 100%; }
-            thead { display: none; } /* ซ่อนหัวตาราง */
-
-            /* แปลงแต่ละแถวเป็น "การ์ด" */
-            tbody tr {
-                background: white;
-                margin-bottom: 20px; /* เพิ่มระยะห่างระหว่างการ์ด */
-                border-radius: 15px;
-                padding: 20px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-                border: 1px solid var(--border);
-                border-left: 8px solid var(--secondary); /* เพิ่มขอบสีข้าง */
-                display: flex;
-                flex-direction: column;
-                gap: 12px; /* เพิ่มระยะห่างระหว่างข้อมูลข้างใน */
-            }
-            tbody tr:hover { background-color: white; transform: none; }
-
-            td {
-                padding: 0;
-                border: none !important;
-                width: 100% !important;
-                text-align: left !important; /* จัดซ้ายทั้งหมดบนมือถือ */
-                font-size: 1.1rem;
-            }
-
-            /* ปรับแต่งรายละเอียดข้างในการ์ด */
-            .col-date {
-                font-size: 1.05rem;
-                font-weight: 400;
-                color: var(--text-dark);
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            .col-date::before { content: '📅'; font-size: 1.2rem; }
-
-            .col-time {
-                font-size: 1.3rem; /* เน้นเวลาให้ชัด */
-                color: var(--primary);
-                font-weight: 700;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            .col-time::before { content: '⏰'; font-size: 1.3rem; }
-
-            .col-title {
-                font-size: 1.25rem;
-                font-weight: 600;
-                line-height: 1.5;
-                color: #000;
-                border-top: 1px dashed var(--border); /* ขีดเส้นคั่น */
-                padding-top: 12px;
-                margin-top: 5px;
-            }
+        .status-now {
+            display: inline-block;
+            background: #E8F5E9; color: #2E7D32; 
+            padding: 3px 10px; border-radius: 12px; 
+            font-size: 0.85rem; font-weight: bold; 
+            margin-top: 5px;
         }
 
-        /* ส่วนท้าย (Footer) */
+        /* ส่วนท้าย */
         footer {
-            background-color: #f1ede4;
-            color: var(--text-light);
-            text-align: center;
-            padding: 25px 15px;
-            margin-top: 40px;
-            font-size: 0.95rem;
-            border-top: 1px solid #e0dcd2;
+            background-color: #f1ede4; color: #666; text-align: center;
+            padding: 25px 15px; margin-top: 40px; font-size: 0.95rem; border-top: 1px solid #e0dcd2;
         }
         .credit { font-weight: 700; color: var(--primary); margin-top: 10px; font-size: 1.1rem; }
-        
-        /* สไตล์สำหรับ All-day events */
-        .all-day-badge {
-            background-color: var(--accent);
-            color: var(--primary);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-left: 5px;
-        }
+
+        .status-message { text-align: center; padding: 40px; font-size: 1.2rem; color: var(--secondary); }
     </style>
 </head>
 <body>
@@ -217,37 +132,21 @@
 </header>
 
 <div class="container">
-    <div class="section-title">งานที่กำลังจะถึง</div>
+    <div class="section-title">ตารางงานที่กำลังจะถึง</div>
     
     <div class="table-wrapper">
-        <table id="schedule-table">
+        <table>
             <thead>
                 <tr>
                     <th>วัน/เดือน/ปี</th>
                     <th>เวลา</th>
                     <th>ศาสนกิจ</th>
+                    <th>สถานที่</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="schedule-body">
                 <tr>
-                    <td class="col-date">พุธ ที่ 9 เมษายน 2569</td>
-                    <td class="col-time">09:00 น.</td>
-                    <td class="col-title">ประชุมคณะสงฆ์จังหวัดหนองบัวลำภู ณ วัดมหาชัย</td>
-                </tr>
-                <tr>
-                    <td class="col-date">ศุกร์ ที่ 10 เมษายน 2569</td>
-                    <td class="col-time">ตลอดวัน</td>
-                    <td class="col-title">งานสรงน้ำพระเถระผู้ใหญ่เนื่องในวันสงกรานต์</td>
-                </tr>
-                <tr>
-                    <td class="col-date">อาทิตย์ ที่ 12 เมษายน 2569</td>
-                    <td class="col-time">13:30 น. - 16:00 น.</td>
-                    <td class="col-title">บรรยายธรรมพิเศษหัวข้อ "ธรรมะกับการใช้ชีวิตในโลกปัจจุบัน" ณ หอประชุมเทศบาล</td>
-                </tr>
-                 <tr>
-                    <td class="col-date">จันทร์ ที่ 13 เมษายน 2569</td>
-                    <td class="col-time">07:00 น.</td>
-                    <td class="col-title">ทำบุญตักบาตรเนื่องในวันขึ้นปีใหม่ไทย ณ วัดศรีบุญเรืองวรวิหาร</td>
+                    <td colspan="4" class="status-message">⏳ กำลังโหลดข้อมูล...</td>
                 </tr>
             </tbody>
         </table>
@@ -255,9 +154,77 @@
 </div>
 
 <footer>
-    <div>ระบบจัดการตารางงานพระเถระ (อัปเดตอัตโนมัติ)</div>
+    <div>ระบบตรวจสอบตารางศาสนกิจ (อัปเดตอัตโนมัติ)</div>
     <div class="credit">จัดทำโดย: พระมหาจักรภัทร คมฺภรญาณเมธี</div>
 </footer>
+
+<script>
+    // --- ใส่ API Key และ Calendar ID ให้เรียบร้อยแล้ว ---
+    const API_KEY = 'AIzaSyDMFzZarwGw0uN1uDl91zx34hJjmVpBITs'; 
+    const CALENDAR_ID = 'cakrphathrxathcakr@gmail.com';
+
+    async function loadSchedule() {
+        const tbody = document.getElementById('schedule-body');
+        
+        const now = new Date();
+        const startStr = new Date(now.setHours(0,0,0,0)).toISOString();
+        const endStr = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(); // ดึงล่วงหน้า 30 วัน
+
+        const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&timeMin=${startStr}&timeMax=${endStr}&singleEvents=true&orderBy=startTime`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.error) throw new Error(data.error.message);
+
+            const validEvents = data.items ? data.items.filter(event => {
+                const endTime = new Date(event.end.dateTime || event.end.date);
+                return event.end.dateTime ? endTime > new Date() : (new Date(event.end.date).getTime() + 86400000 > new Date().getTime());
+            }) : [];
+
+            if (validEvents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="status-message">ไม่มีกำหนดการศาสนกิจในช่วงนี้</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = ''; // ล้างข้อความโหลด
+            
+            validEvents.forEach(event => {
+                const start = new Date(event.start.dateTime || event.start.date);
+                const end = new Date(event.end.dateTime || event.end.date);
+                
+                // จัดรูปแบบวันที่
+                const dateLabel = start.toLocaleDateString('th-TH', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+                
+                // จัดรูปแบบเวลา
+                let timeLabel = event.start.dateTime 
+                    ? start.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.' 
+                    : 'ตลอดวัน';
+
+                // เช็คว่ากำลังดำเนินการอยู่ไหม
+                const isNow = (new Date() >= start && new Date() <= end) && event.start.dateTime;
+                const statusHtml = isNow ? `<br><span class="status-now">● ขณะนี้</span>` : '';
+
+                const row = `
+                    <tr>
+                        <td class="col-date">${dateLabel}</td>
+                        <td class="col-time">${timeLabel} ${statusHtml}</td>
+                        <td class="col-title">${event.summary || 'ไม่ได้ระบุชื่องาน'}</td>
+                        <td class="col-location">📍 ${event.location || '-'}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="4" class="status-message" style="color:red;"><b>เกิดข้อผิดพลาด:</b> ${err.message}<br><small>กรุณาตรวจสอบว่าเปิดใช้งาน Google Calendar API แล้ว</small></td></tr>`;
+        }
+    }
+
+    loadSchedule();
+    setInterval(loadSchedule, 300000); // อัปเดตทุก 5 นาที
+</script>
 
 </body>
 </html>
